@@ -21,11 +21,6 @@ tmp
 # Dependencies
 node_modules
 
-# Build dirs
-.next
-build
-dist
-
 # Generated files
 .cache-loader
 packages/next-auth/providers
