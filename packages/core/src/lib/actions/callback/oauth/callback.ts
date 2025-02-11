@@ -156,6 +156,16 @@ export async function handleOAuth(
     redirect_uri = provider.redirectProxyUrl
   }
 
+  let additionalParameters: URLSearchParams | undefined
+  const additionalParametersKeys = provider.token?.additionalParametersKeys
+  if (additionalParametersKeys) {
+    const originalParams = new URLSearchParams(params)
+    const filteredParams = Array.from(originalParams.entries()).filter(
+      ([key]) => additionalParametersKeys.includes(key)
+    )
+    additionalParameters = new URLSearchParams(filteredParams)
+  }
+
   let codeGrantResponse = await o.authorizationCodeGrantRequest(
     as,
     client,
@@ -172,6 +182,7 @@ export async function handleOAuth(
         }
         return (provider[customFetch] ?? fetch)(...args)
       },
+      additionalParameters: additionalParameters,
     }
   )
 

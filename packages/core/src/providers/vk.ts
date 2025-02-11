@@ -361,19 +361,20 @@ export interface VkProfile {
 export default function VK<P extends Record<string, any> = VkProfile>(
   options: OAuthUserConfig<P>
 ): OAuthConfig<P> {
-  const apiVersion = "5.131" // https://vk.com/dev/versions
-
   return {
     id: "vk",
     name: "VK",
     type: "oauth",
-    authorization: `https://oauth.vk.com/authorize?scope=email&v=${apiVersion}`,
+    authorization: `https://id.vk.com/authorize`,
     client: {
       token_endpoint_auth_method: "client_secret_post",
     },
-    token: `https://oauth.vk.com/access_token?v=${apiVersion}`,
+    token: {
+      url: `https://id.vk.com/oauth2/auth`,
+      additionalParametersKeys: ["device_id"],
+    },
     userinfo: {
-      url: `https://api.vk.com/method/users.get?fields=photo_100&v=${apiVersion}`,
+      url: `https://id.vk.com/oauth2/user_info`,
       async request({ tokens, provider }) {
         const profile = await fetch(provider.userinfo?.url as URL, {
           headers: {

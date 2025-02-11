@@ -35,6 +35,7 @@ interface AdvancedEndpointHandler<P extends UrlParams, C, R> {
   url?: string
   /** These will be prepended to the `url` */
   params?: P
+  additionalParametersKeys?: string[]
   /**
    * Control the corresponding OAuth endpoint request completely.
    * Useful if your provider relies on some custom behaviour
@@ -44,6 +45,7 @@ interface AdvancedEndpointHandler<P extends UrlParams, C, R> {
    * You should **try to avoid using advanced options** unless you are very comfortable using them.
    */
   request?: EndpointRequest<C, R, P>
+
   /** @internal */
   conform?: (response: Response) => Awaitable<Response | undefined>
   clientPrivateKey?: CryptoKey | PrivateKey
@@ -270,6 +272,7 @@ export type OAuthConfigInternal<Profile> = Omit<
     url: URL
     request?: TokenEndpointHandler["request"]
     clientPrivateKey?: CryptoKey | PrivateKey
+    additionalParametersKeys?: string[]
     /**
      * @internal
      * @deprecated
